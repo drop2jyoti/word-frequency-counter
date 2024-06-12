@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import string
 import numpy as np
+from operator import itemgetter
 
 # Read the file line by line and analyse the word frequency
 def count_frequency(file_location):
@@ -65,12 +66,22 @@ def print_the_words_with_frequency(sortedDict):
 
 # Matplot to generate a plot
 def plot_graph(sortedDict):
-    data_words = sortedDict.keys()
-    words_counts = sortedDict.values()
+    #Plot top 20 words
+    top_20 = dict(sorted(sortedDict.items(), key=itemgetter(1), reverse=True)[:20])
+    data_words = top_20.keys()
+    words_counts = top_20.values()
     indexes = np.arange(len(data_words))
-    width = 0.7
+    width = 0.3
+    plt.xlabel('Words')
+    plt.ylabel('Frequency')
     plt.bar(indexes, words_counts, width)
     plt.xticks(indexes + width * 0.5, data_words)
+    
+    plt.title(label="Top 20 Word Frequency counter",
+          loc="left",
+          fontstyle='italic')
+    mng = plt.get_current_fig_manager()
+    mng.full_screen_toggle()        
     plt.show()
 
 def main():
@@ -100,7 +111,7 @@ def main():
         print("######################################################")
         print("{}   ===>   {}".format("WORDS", "COUNT"))
         print("\n")
-        print_the_words_with_frequency(result)
+        #print_the_words_with_frequency(result)
         print("#####################################################")
         print("########### Plotting the graph please wait.... ########")
         plot_graph(result)
