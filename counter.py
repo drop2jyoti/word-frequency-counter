@@ -3,6 +3,7 @@ import string
 import numpy as np
 from operator import itemgetter
 
+
 # Read the file line by line and analyse the word frequency
 def count_frequency(file_location):
     # Create an empty dictionary
@@ -10,6 +11,7 @@ def count_frequency(file_location):
     # Loop through each line of the file
     try:
         with open(file_location, "r") as file:
+            stop_word_list = get_stop_word_list() # List of stopwords()
             for line in file:
                 # Remove the leading spaces and newline character
                 line = line.strip()
@@ -26,10 +28,10 @@ def count_frequency(file_location):
                 words = line.split(" ")
                 # Iterate over each word in line
                 for word in words:
-                    if word == "":
+                    if word == "" or word in stop_word_list:
                         continue
                     # Check if the word is already in dictionary
-                    if word in d:
+                    elif word in d:
                         # Increment count of word by 1
                         d[word] = d[word] + 1
                     else:
@@ -42,6 +44,14 @@ def count_frequency(file_location):
     except IOError:
             print("Invalid file location")
             return None
+# Load stop word list from kaggle's englishST.txt
+def get_stop_word_list():
+    with open('englishST.txt') as f:
+        stop_word_list=[]
+        for word in f.read().split():
+            stop_word_list.append(word)
+        return stop_word_list
+    
 
 # feature to write the word and frequency into file  
 def write_to_file(sortedDict, file_location):  
@@ -61,27 +71,29 @@ def create_user_input_file(lines):
 
 #print the word and the frequency on console
 def print_the_words_with_frequency(sortedDict):
+    print(f"Word{' ':14} Frequency{' ':15}")
     for key in list(sortedDict.keys()):
-        print(f"{key} ===> {sortedDict[key]}\n")  
+        print(f"{key:15} {sortedDict[key]:8}")  
 
 # Matplot to generate a plot
 def plot_graph(sortedDict):
-    #Plot top 20 words
-    top_20 = dict(sorted(sortedDict.items(), key=itemgetter(1), reverse=True)[:20])
-    data_words = top_20.keys()
-    words_counts = top_20.values()
+    #Plot top 25 words
+    top_25 = dict(sorted(sortedDict.items(), key=itemgetter(1), reverse=True)[:25])
+    data_words = top_25.keys()
+    words_counts = top_25.values()
     indexes = np.arange(len(data_words))
-    width = 0.3
+    width = 0.4
     plt.xlabel('Words')
     plt.ylabel('Frequency')
     plt.bar(indexes, words_counts, width)
-    plt.xticks(indexes + width * 0.5, data_words)
+    plt.xticks(indexes + width * 0.5, data_words, rotation=30)
     
     plt.title(label="Top 20 Word Frequency counter",
           loc="left",
           fontstyle='italic')
     mng = plt.get_current_fig_manager()
-    mng.full_screen_toggle()        
+    mng.full_screen_toggle()
+    mng.set_window_title("Word Frequency Counter project by - Jyoti Narang")
     plt.show()
 
 def main():
@@ -109,9 +121,11 @@ def main():
         print("Total number of words:" , len(result))
         print("Most common word used is: " , max(result, key=result.get))
         print("######################################################")
-        print("{}   ===>   {}".format("WORDS", "COUNT"))
-        print("\n")
-        #print_the_words_with_frequency(result)
+        #print("{}   ===>   {}".format("WORDS", "COUNT"))
+        #print("\n")
+        #df = pd.DataFrame([result])
+        #print(df)
+        print_the_words_with_frequency(result)
         print("#####################################################")
         print("########### Plotting the graph please wait.... ########")
         plot_graph(result)
