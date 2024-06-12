@@ -1,3 +1,4 @@
 # code-in-place-word-frequency-counter
 Code in Place final project showcasing python
-![image](https://github.com/drop2jyoti/code-in-place-word-frequency-counter/assets/2778937/424d6887-5346-4303-a6e5-fd6cd88a7a6f)
+
+![Word_Frequency_Counter_project_by_-_Jyoti_Narang](https://github.com/drop2jyoti/code-in-place-word-frequency-counter/assets/2778937/daacb804-9f11-47d6-b344-811f1d67a870)
